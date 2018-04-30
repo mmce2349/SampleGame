@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace SampleGame.controller
+namespace SampleGame
 {
 	/// <summary>
 	/// This is the main type for your game.
