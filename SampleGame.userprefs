@@ -1,9 +1,10 @@
 ﻿<Properties StartupConfiguration="{DC896ECA-2B96-4129-B46E-F80BB7700785}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="SampleGame/Model/PlayerClass.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="SampleGame/View/Animation.cs">
     <Files>
-      <File FileName="SampleGame/Controller/SpaceGame.cs" Line="7" Column="21" />
-      <File FileName="SampleGame/Controller/Program.cs" Line="14" Column="32" />
-      <File FileName="SampleGame/Model/PlayerClass.cs" Line="21" Column="20" />
+      <File FileName="SampleGame/Controller/SampleGame.cs" Line="89" Column="24" />
+      <File FileName="SampleGame/Controller/Program.cs" Line="14" Column="23" />
+      <File FileName="SampleGame/Model/Player.cs" Line="32" Column="4" />
+      <File FileName="SampleGame/View/Animation.cs" Line="2" Column="26" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
