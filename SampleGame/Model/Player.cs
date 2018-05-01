@@ -1,11 +1,11 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-namespace SampleGame
+namespace SampleGame.Model
 {
-	public class PlayerClass
+	public class Player
 	{
-		public PlayerClass()
+		public Player()
 		{
 		}
 		public void Initialize(Texture2D texture, Vector2 position)

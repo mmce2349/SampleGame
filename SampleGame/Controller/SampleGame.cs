@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SampleGame.Model;
 
-namespace SampleGame
+namespace SampleGame.Controller
 {
 	/// <summary>
 	/// This is the main type for your game.
@@ -44,7 +44,7 @@ namespace SampleGame
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 			Vector2 playerPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
-			player.Intialize(Content.Load<Texture2D>("Texture/player"), playerPosition);
+			player.Initialize(Content.Load<Texture2D>("Texture/player"), playerPosition);
 
 			//TODO: use this.Content to load your game content here 
 		}
