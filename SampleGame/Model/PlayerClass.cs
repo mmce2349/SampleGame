@@ -33,7 +33,7 @@ namespace SampleGame
 		//position of the player relative.... to screen
 		public Vector2 Position;
 
-		private bool active
+		private bool active;
 		public bool Active
 		{
 			get { return active; }
