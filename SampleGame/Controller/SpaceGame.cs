@@ -3,6 +3,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SampleGame.Model;
 
 namespace SampleGame
 {
@@ -13,7 +14,7 @@ namespace SampleGame
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
-
+		private Player player;
 		public SpaceGame()
 		{
 			graphics = new GraphicsDeviceManager(this);
@@ -31,6 +32,7 @@ namespace SampleGame
 			// TODO: Add your initialization logic here
 
 			base.Initialize();
+			player = new Player();
 		}
 
 		/// <summary>
@@ -41,6 +43,9 @@ namespace SampleGame
 		{
 			// Create a new SpriteBatch, which can be used to draw textures.
 			spriteBatch = new SpriteBatch(GraphicsDevice);
+			Vector2 playerPosition = new;
+			Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
+			player.Intialize(Content.Load<Texture2D>("Texture/player"), playerPosition);
 
 			//TODO: use this.Content to load your game content here 
 		}
@@ -73,6 +78,9 @@ namespace SampleGame
 			graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
 
 			//TODO: Add your drawing code here
+			spriteBatch.Begin();
+			player.Draw(spriteBatch);
+			spriteBatch.End();
 
 			base.Draw(gameTime);
 		}
