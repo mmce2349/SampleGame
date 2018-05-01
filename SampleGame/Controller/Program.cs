@@ -20,11 +20,11 @@ namespace SampleGame.controller
 	static class Program
 #endif
 	{
-		private static SpaceGame game;
+		private static SampleGame game;
 
 		internal static void RunGame()
 		{
-			game = new SpaceGame();
+			game = new SampleGame();
 			game.Run();
 #if !__IOS__ && !__TVOS__
 			game.Dispose();

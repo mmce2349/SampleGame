@@ -10,12 +10,12 @@ namespace SampleGame
 	/// <summary>
 	/// This is the main type for your game.
 	/// </summary>
-	public class SpaceGame : Game
+	public class SampleGame : Game
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
 		private Player player;
-		public SpaceGame()
+		public SampleGame()
 		{
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
