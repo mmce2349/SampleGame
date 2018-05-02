@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SampleGame.Model;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 namespace SampleGame.Controller
 {
@@ -39,6 +41,14 @@ namespace SampleGame.Controller
 		private TimeSpan previousFireTime;
 		private Texture2D explosionTexture;
 		private List<Animation> explosions;
+		// The sound that is played when a laser is fired
+		private SoundEffect laserSound;
+
+		// The sound used when the player or an enemy dies
+		private SoundEffect explosionSound;
+
+		// The music played during gameplay
+		private Song gameplayMusic;
 		public SampleGame()
 		{
 			graphics = new GraphicsDeviceManager(this);
@@ -72,6 +82,21 @@ namespace SampleGame.Controller
 		/// LoadContent will be called once per game and is the place to load
 		/// all of your content.
 		/// </summary>
+		/// 
+	 private void PlayMusic(Song song)
+{
+    // Due to the way the MediaPlayer plays music,
+    // we have to catch the exception. Music will play when the game is not tethered
+    try
+    {
+        // Play the music
+        MediaPlayer.Play(song);
+
+        // Loop the currently playing song
+        MediaPlayer.IsRepeating = true;
+    }
+    catch { } //No Exception is handled so it is an empty/anonymous exception
+}
 		protected override void LoadContent()
 		{
 			// Create a new SpriteBatch, which can be used to draw textures.
@@ -89,7 +114,15 @@ namespace SampleGame.Controller
 			projectileTexture = Content.Load<Texture2D>("Texture/laser");
 			mainBackground = Content.Load<Texture2D>("Texture/mainbackground");
 			explosionTexture = Content.Load<Texture2D>("Animation/explosion");
+						// Load the music
+			gameplayMusic = Content.Load<Song>("Sound/gameMusic");
 
+			// Load the laser and explosion sound effect
+			laserSound = Content.Load<SoundEffect>("Sound/laserFire");
+			explosionSound = Content.Load<SoundEffect>("Sound/explosion");
+
+			// Start the music right away
+			PlayMusic(gameplayMusic);
 			//TODO: use this.Content to load your game content here 
 		}
 		private void AddExplosion(Vector2 position)
@@ -166,6 +199,8 @@ for (int i = 0; i<projectiles.Count; i++)
 			// Add an explosion
 			AddExplosion(enemies[i].Position);
 		}
+					// Play the explosion sound
+		explosionSound.Play();
     }
 }
 
@@ -219,6 +254,8 @@ private void AddProjectile(Vector2 position)
 		}
 		private void UpdatePlayer(GameTime gameTime)
 		{
+			// Play the laser sound
+			laserSound.Play();
 			player.Update(gameTime);
 			 // Get Thumbstick Controls
     player.Position.X += currentGamePadState.ThumbSticks.Left.X* playerMoveSpeed;
