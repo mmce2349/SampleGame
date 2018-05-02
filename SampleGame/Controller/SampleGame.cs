@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using SampleGame.Model;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
-
+using System.Collections.Generic;
 namespace SampleGame.Controller
 {
 	/// <summary>
@@ -18,6 +18,16 @@ namespace SampleGame.Controller
 	private Texture2D mainBackground;
 
 	// Parallaxing Layers
+// Enemies
+private Texture2D enemyTexture;
+private List<Enemy> enemies;
+
+// The rate at which the enemies appear
+private TimeSpan enemySpawnTime;
+private TimeSpan previousSpawnTime;
+
+// A random number generator
+private Random random;
 	private ParallaxingBackground bgLayer1;
 	private ParallaxingBackground bgLayer2;
 		GraphicsDeviceManager graphics;
@@ -77,6 +87,17 @@ namespace SampleGame.Controller
 			// Set the laser to fire every quarter second
 			fireTime = TimeSpan.FromSeconds(.15f);
 		}
+				// Initialize the enemies list
+		enemies = new List<Enemy> ();
+
+		// Set the time keepers to zero
+		previousSpawnTime = TimeSpan.Zero;
+
+		// Used to determine how fast enemy respawns
+		enemySpawnTime = TimeSpan.FromSeconds(1.0f);
+
+		// Initialize our random number generator
+		random = new Random();
 
 		/// <summary>
 		/// LoadContent will be called once per game and is the place to load
@@ -120,7 +141,7 @@ namespace SampleGame.Controller
 			// Load the laser and explosion sound effect
 			laserSound = Content.Load<SoundEffect>("Sound/laserFire");
 			explosionSound = Content.Load<SoundEffect>("Sound/explosion");
-
+			enemyTexture = Content.Load<Texture2D>("Animation/mineAnimation");
 			// Start the music right away
 			PlayMusic(gameplayMusic);
 			//TODO: use this.Content to load your game content here 
@@ -142,6 +163,48 @@ namespace SampleGame.Controller
 				}
 		 	}
 		}
+private void AddEnemy()
+{
+	// Create the animation object
+	Animation enemyAnimation = new Animation();
+
+	// Initialize the animation with the correct animation information
+	enemyAnimation.Initialize(enemyTexture, Vector2.Zero, 47, 61, 8, 30, Color.White, 1f, true);
+
+	// Randomly generate the position of the enemy
+	Vector2 position = new Vector2(GraphicsDevice.Viewport.Width + enemyTexture.Width / 2, random.Next(100, GraphicsDevice.Viewport.Height - 100));
+
+	// Create an enemy
+	Enemy enemy = new Enemy();
+
+	// Initialize the enemy
+	enemy.Initialize(enemyAnimation, position);
+
+	// Add the enemy to the active enemies list
+	enemies.Add(enemy);
+}
+private void UpdateEnemies(GameTime gameTime)
+{
+	// Spawn a new enemy enemy every 1.5 seconds
+	if (gameTime.TotalGameTime - previousSpawnTime > enemySpawnTime)
+	{
+		previousSpawnTime = gameTime.TotalGameTime;
+
+		// Add an Enemy
+		AddEnemy();
+	}
+
+	// Update the Enemies
+	for (int i = enemies.Count - 1; i >= 0; i--)
+	{
+		enemies[i].Update(gameTime);
+
+		if (enemies[i].Active == false)
+		{
+			enemies.RemoveAt(i);
+		}
+ }
+}
 		/// <summary>
 		/// Allows the game to run logic such as updating the world,
 		/// checking for collisions, gathering input, and playing audio.
@@ -176,6 +239,8 @@ bgLayer2.Update();
 UpdateProjectiles();
 			// Update the explosions
 UpdateExplosions(gameTime);
+			// Update the enemies
+UpdateEnemies(gameTime);
 			// Projectile vs Enemy Collision
 for (int i = 0; i<projectiles.Count; i++)
 {
@@ -251,6 +316,11 @@ private void AddProjectile(Vector2 position)
 			    projectiles[i].Draw(spriteBatch);
 			}
 			base.Draw(gameTime);
+					// Draw the Enemies
+		for (int i = 0; i<enemies.Count; i++)
+		{
+		enemies[i].Draw(spriteBatch);
+		}
 		}
 		private void UpdatePlayer(GameTime gameTime)
 		{
