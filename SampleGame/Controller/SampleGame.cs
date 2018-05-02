@@ -37,7 +37,8 @@ namespace SampleGame.Controller
 		// The rate of fire of the player laser
 		private TimeSpan fireTime;
 		private TimeSpan previousFireTime;
-
+		private Texture2D explosionTexture;
+		private List<Animation> explosions;
 		public SampleGame()
 		{
 			graphics = new GraphicsDeviceManager(this);
@@ -58,6 +59,7 @@ namespace SampleGame.Controller
 			bgLayer1 = new ParallaxingBackground();
 			bgLayer2 = new ParallaxingBackground();
 			player = new Player();
+			explosions = new List<Animation>();
 			// Set a constant player move speed
 		playerMoveSpeed = 8.0f;
 			projectiles = new List<Projectile>();
@@ -86,11 +88,27 @@ namespace SampleGame.Controller
 			bgLayer2.Initialize(Content, "Texture/bgLayer2", GraphicsDevice.Viewport.Width, -2);
 			projectileTexture = Content.Load<Texture2D>("Texture/laser");
 			mainBackground = Content.Load<Texture2D>("Texture/mainbackground");
-
+			explosionTexture = Content.Load<Texture2D>("Animation/explosion");
 
 			//TODO: use this.Content to load your game content here 
 		}
-
+		private void AddExplosion(Vector2 position)
+		{
+			Animation explosion = new Animation();
+			explosion.Initialize(explosionTexture, position, 134, 134, 12, 45, Color.White, 1f, false);
+			explosions.Add(explosion);
+		}
+		private void UpdateExplosions(GameTime gameTime)
+		{
+			for (int i = explosions.Count - 1; i >= 0; i--)
+			{
+				explosions[i].Update(gameTime);
+				if (explosions[i].Active == false)
+				{
+					explosions.RemoveAt(i);
+				}
+		 	}
+		}
 		/// <summary>
 		/// Allows the game to run logic such as updating the world,
 		/// checking for collisions, gathering input, and playing audio.
@@ -123,6 +141,8 @@ bgLayer2.Update();
 			base.Update(gameTime);
 			// Update the projectiles
 UpdateProjectiles();
+			// Update the explosions
+UpdateExplosions(gameTime);
 			// Projectile vs Enemy Collision
 for (int i = 0; i<projectiles.Count; i++)
 {
@@ -140,6 +160,12 @@ for (int i = 0; i<projectiles.Count; i++)
             enemies[j].Health -= projectiles[i].Damage;
             projectiles[i].Active = false;
         }
+							// If not active and health <= 0
+		if (enemies[i].Health <= 0)
+		{
+			// Add an explosion
+			AddExplosion(enemies[i].Position);
+		}
     }
 }
 
@@ -178,7 +204,10 @@ private void AddProjectile(Vector2 position)
 				// Draw the moving background
 				bgLayer1.Draw(spriteBatch);
 				bgLayer2.Draw(spriteBatch);
-
+						for (int i = 0; i<explosions.Count; i++)
+			{
+			    explosions[i].Draw(spriteBatch);
+			}
 			player.Draw(spriteBatch);
 			spriteBatch.End();
 			// Draw the Projectiles
