@@ -6,7 +6,7 @@
       <File FileName="SampleGame/Model/Player.cs" Line="37" Column="38" />
       <File FileName="SampleGame/View/Animation.cs" Line="11" Column="4" />
       <File FileName="SampleGame/View/ParallaxingBackground.cs" Line="11" Column="4" />
-      <File FileName="SampleGame/Model/Enemy.cs" Line="2" Column="27" />
+      <File FileName="SampleGame/Model/Enemy.cs" Line="120" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
