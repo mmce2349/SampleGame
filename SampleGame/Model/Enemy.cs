@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SampleGame.View;
+
 namespace SampleGame.Model
 {
 	public class Enemy
@@ -107,51 +108,17 @@ namespace SampleGame.Model
 				// If the enemy is past the screen or its health reaches 0 then deactivate it
 				if (Position.X < -Width || Health <= 0)
 				{
-					// By setting the Active flag to false, the game will remove this object from the
-					// active game list
-					Active = false   }
-				// Update the collision
-				UpdateCollision();
+				// By setting the Active flag to false, the game will remove this object from the
+				// active game list
+				Active = false; 
+				}
+				
 			}
 
 			public void Draw(SpriteBatch spriteBatch)
 			{
 				// Draw the animation
 				enemyAnimation.Draw(spriteBatch);
-			}
-			private void UpdateCollision()
-			{
-				// Use the Rectangle's built-in intersect function to 
-				// determine if two objects are overlapping
-				Rectangle rectangle1;
-				Rectangle rectangle2;
-
-				// Only create the rectangle once for the player
-				rectangle1 = new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Width, player.Height);
-
-				// Do the collision between the player and the enemies
-				for (int i = 0; i < enemies.Count; i++)
-				{
-					rectangle2 = new Rectangle((int)enemies[i].Position.X, (int)enemies[i].Position.Y, enemies[i].Width, enemies[i].Height);
-
-					// Determine if the two objects collided with each other
-					if (rectangle1.Intersects(rectangle2))
-					{
-						// Subtract the health from the player based on
-						// the enemy damage
-						player.Health -= enemies[i].Damage;
-
-						// Since the enemy collided with the player
-						// destroy it
-						enemies[i].Health = 0;
-
-						// If the player health is less than zero we died
-						if (player.Health <= 0)
-						{
-							player.Active = false;
-						}
-					} 
-				}
 			}
 
 

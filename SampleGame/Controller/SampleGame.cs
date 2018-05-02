@@ -203,8 +203,7 @@ private Random random;
 		            projectiles[i].Active = false;
 		        }
 				
-							// Play the explosion sound
-				explosionSound.Play();
+							
 		   		 }
 			}
 		}
@@ -250,6 +249,8 @@ private void UpdateEnemies(GameTime gameTime)
 		// Add an Enemy
 		AddEnemy();
 	}
+						// Play the explosion sound
+				explosionSound.Play();
 
 	// Update the Enemies
 	for (int i = enemies.Count - 1; i >= 0; i--)
