@@ -152,6 +152,63 @@ private Random random;
 			explosion.Initialize(explosionTexture, position, 134, 134, 12, 45, Color.White, 1f, false);
 			explosions.Add(explosion);
 		}
+		private void UpdateCollision()
+		{
+			// Use the Rectangle's built-in intersect function to 
+			// determine if two objects are overlapping
+			Rectangle rectangle1;
+			Rectangle rectangle2;
+
+			// Only create the rectangle once for the player
+			rectangle1 = new Rectangle((int)player.Position.X, (int)player.Position.Y, player.Width, player.Height);
+
+			// Do the collision between the player and the enemies
+			for (int i = 0; i < enemies.Count; i++)
+			{
+				rectangle2 = new Rectangle((int)enemies[i].Position.X, (int)enemies[i].Position.Y, enemies[i].Width, enemies[i].Height);
+
+				// Determine if the two objects collided with each other
+				if (rectangle1.Intersects(rectangle2))
+				{
+					// Subtract the health from the player based on
+					// the enemy damage
+					player.Health -= enemies[i].Damage;
+
+					// Since the enemy collided with the player
+					// destroy it
+					enemies[i].Health = 0;
+
+					// If the player health is less than zero we died
+					if (player.Health <= 0)
+					{
+						player.Active = false;
+					}
+				}
+			}
+						// Projectile vs Enemy Collision
+		for (int i = 0; i<projectiles.Count; i++)
+		{
+		    for (int j = 0; j<enemies.Count; j++)
+		    {
+		        // Create the rectangles we need to determine if we collided with each other
+		        rectangle1 = new Rectangle((int)projectiles[i].Position.X - projectiles[i].Width / 2, (int) projectiles[i].Position.Y - 
+		 projectiles[i].Height / 2, projectiles[i].Width, projectiles[i].Height);
+
+		        rectangle2 = new Rectangle((int)enemies[j].Position.X - enemies[j].Width / 2, (int) enemies[j].Position.Y - enemies[j].Height / 2, enemies[j].Width, enemies[j].Height);
+
+		        // Determine if the two objects collided with each other
+		        if (rectangle1.Intersects(rectangle2))
+		        {
+		            enemies[j].Health -= projectiles[i].Damage;
+		            projectiles[i].Active = false;
+		        }
+				
+							// Play the explosion sound
+				explosionSound.Play();
+		   		 }
+			}
+		}
+
 		private void UpdateExplosions(GameTime gameTime)
 		{
 			for (int i = explosions.Count - 1; i >= 0; i--)
@@ -204,6 +261,12 @@ private void UpdateEnemies(GameTime gameTime)
 			enemies.RemoveAt(i);
 		}
  }
+								// If not active and health <= 0
+				if (enemies[i].Health <= 0)
+				{
+					// Add an explosion
+					AddExplosion(enemies[i].Position);
+				}
 }
 		/// <summary>
 		/// Allows the game to run logic such as updating the world,
@@ -217,10 +280,10 @@ private void UpdateEnemies(GameTime gameTime)
 #if !__IOS__ && !__TVOS__
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
-#endif
-
-			// TODO: Add your update logic here
-			// Save the previous state of the keyboard and game pad so we can determinesingle key/button presses
+							// Update the collision
+				UpdateCollision();
+// TODO: Add your update logic here
+// Save the previous state of the keyboard and game pad so we can determinesingle key/button presses
 previousGamePadState = currentGamePadState;
 previousKeyboardState = currentKeyboardState;
 
@@ -231,7 +294,7 @@ currentGamePadState = GamePad.GetState(PlayerIndex.One);
 
 //Update the player
 UpdatePlayer(gameTime);
-			// Update the parallaxing background
+// Update the parallaxing background
 bgLayer1.Update();
 bgLayer2.Update();
 			base.Update(gameTime);
@@ -241,33 +304,9 @@ UpdateProjectiles();
 UpdateExplosions(gameTime);
 			// Update the enemies
 UpdateEnemies(gameTime);
-			// Projectile vs Enemy Collision
-for (int i = 0; i<projectiles.Count; i++)
-{
-    for (int j = 0; j<enemies.Count; j++)
-    {
-        // Create the rectangles we need to determine if we collided with each other
-        rectangle1 = new Rectangle((int)projectiles[i].Position.X - projectiles[i].Width / 2, (int) projectiles[i].Position.Y - 
- projectiles[i].Height / 2, projectiles[i].Width, projectiles[i].Height);
 
-        rectangle2 = new Rectangle((int)enemies[j].Position.X - enemies[j].Width / 2, (int) enemies[j].Position.Y - enemies[j].Height / 2, enemies[j].Width, enemies[j].Height);
-
-        // Determine if the two objects collided with each other
-        if (rectangle1.Intersects(rectangle2))
-        {
-            enemies[j].Health -= projectiles[i].Damage;
-            projectiles[i].Active = false;
-        }
-							// If not active and health <= 0
-		if (enemies[i].Health <= 0)
-		{
-			// Add an explosion
-			AddExplosion(enemies[i].Position);
-		}
-					// Play the explosion sound
-		explosionSound.Play();
-    }
-}
+#endif
+	
 
 		}
 private void UpdateProjectiles()
